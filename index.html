@@ -219,7 +219,19 @@
   .slot small { display: block; color: var(--ink-muted); font-size: 12px; }
   .app .q-btn { width: 100%; margin-top: 8px; min-height: 44px; cursor: pointer; transition: background .3s, transform .2s; }
   .app .q-btn:active { transform: scale(.98); }
-  .app .q-btn.done { background: var(--ink); color: var(--sand-50); }
+  .app .q-btn:focus { outline: none; }
+  .app .q-btn:focus-visible { outline: 2px solid var(--terracotta-600); outline-offset: 3px; }
+  .app { position: relative; overflow: hidden; }
+  .app__ok { position: absolute; inset: 0; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 6px; padding: 22px; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility .35s; }
+  .app.ok .app__ok { opacity: 1; visibility: visible; }
+  .app__ok .ring { width: 64px; height: 64px; border-radius: 50%; background: var(--terracotta-600); display: grid; place-items: center; margin-bottom: 10px; transform: scale(.5); transition: transform .5s cubic-bezier(.2,1.5,.4,1); }
+  .app.ok .app__ok .ring { transform: scale(1); }
+  .app__ok .ring svg { width: 30px; height: 30px; fill: none; stroke: var(--on-primary); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 30; stroke-dashoffset: 30; transition: stroke-dashoffset .45s ease .3s; }
+  .app.ok .app__ok .ring svg { stroke-dashoffset: 0; }
+  .app__ok h5 { margin: 0; }
+  .app__ok .sum { font-weight: 600; font-size: 15px; color: var(--terracotta-600); margin-top: 4px; }
+  .app__ok .when { font-size: 13.5px; color: var(--ink); }
+  .app__ok small { display: block; font-size: 12.5px; color: var(--ink-muted); margin-top: 12px; }
   .slot { cursor: pointer; transition: border-color .2s, background .2s; }
   .slot:hover { border-color: var(--terracotta-400); }
   .slot i { transition: border-width .2s, border-color .2s; }
@@ -464,6 +476,7 @@
               <div class="slot sel" role="radio" aria-checked="true" tabindex="0"><i></i><span><span data-i18n="appA">General check-up</span><small data-i18n="appAt">Today · 4:30 PM</small></span></div>
               <div class="slot" role="radio" aria-checked="false" tabindex="0"><i></i><span><span data-i18n="appB">Dental cleaning</span><small data-i18n="appBt">Tomorrow · 10:00 AM</small></span></div>
               <span class="q-btn q-btn--primary" role="button" tabindex="0" data-i18n="appBtn">Confirm booking</span>
+              <div class="app__ok" aria-live="polite"><div class="ring"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h5 data-i18n="okT">Your appointment is confirmed</h5><div class="sum"></div><div class="when"></div><small data-i18n="okS">We’ll send you a reminder before it</small></div>
             </div>
           </div>
         </div>
@@ -690,7 +703,7 @@
     sub: 'نصمم ونطوّر مواقع وتطبيقات بالعربية والإنجليزية، ونرافقك من الفكرة حتى ما بعد الإطلاق.',
     t1: 'من الدمام، السعودية', t2: 'متجاوب مع كل الشاشات', t3: 'عربي وإنجليزي',
     tabD: 'التصميم', tabC: 'الكود', tabL: 'جاهز',
-    appT: 'احجز موعدك', appS: 'اختر الوقت المناسب لك', appA: 'فحص عام', appAt: 'اليوم · 4:30 م', appB: 'تنظيف أسنان', appBt: 'غداً · 10:00 ص', appBtn: 'تأكيد الحجز', appDone: 'تم تأكيد الحجز ✓',
+    appT: 'احجز موعدك', appS: 'اختر الوقت المناسب لك', appA: 'فحص عام', appAt: 'اليوم · 4:30 م', appB: 'تنظيف أسنان', appBt: 'غداً · 10:00 ص', appBtn: 'تأكيد الحجز', okT: 'تم تأكيد موعدك', okS: 'سنرسل لك تذكيراً قبله',
     f1: 'واجهات عربية أولاً', f2: 'تنفيذ مطابق للتصميم',
     sEy: 'خدماتنا', sH: 'كل ما يحتاجه منتجك <em class="hl">تحت سقف واحد</em>', sL: 'التصميم والتطوير معاً، فما توافق عليه هو ما يصل إلى مستخدميك بالضبط.',
     s1T: 'تصميم تجربة وواجهة المستخدم', s1P: 'بحث المستخدمين، والهياكل الأولية، ونماذج تفاعلية، وأنظمة تصميم متكاملة بالعربية والإنجليزية.', s1a: 'بحث المستخدمين', s1c: 'نماذج تفاعلية', s1d: 'أنظمة تصميم',
@@ -806,8 +819,11 @@
     var slots = app.querySelectorAll('.slot'), cbtn = app.querySelector('.q-btn');
     var pick = function (sl) { slots.forEach(function (x) { x.classList.toggle('sel', x === sl); x.setAttribute('aria-checked', x === sl ? 'true' : 'false'); }); holdCycle(); };
     slots.forEach(function (sl) { sl.addEventListener('click', function () { pick(sl); }); sl.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(sl); } }); });
-    var confirmB = function () { if (cbtn.classList.contains('done')) return; cbtn.classList.add('done'); cbtn.textContent = lang === 'ar' ? AR.appDone : 'Booking confirmed ✓'; holdCycle();
-      setTimeout(function () { cbtn.classList.remove('done'); cbtn.innerHTML = lang === 'ar' ? AR.appBtn : cbtn._en; }, 2500); };
+    var confirmB = function () { if (app.classList.contains('ok')) return; var sel = app.querySelector('.slot.sel');
+      app.querySelector('.app__ok .sum').textContent = sel.querySelector('span > span').textContent;
+      app.querySelector('.app__ok .when').textContent = sel.querySelector('small').textContent;
+      app.classList.add('ok'); cbtn.blur(); holdCycle();
+      setTimeout(function () { app.classList.remove('ok'); }, 3000); };
     cbtn.addEventListener('click', confirmB); cbtn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); confirmB(); } });
   }
   var resumeT; ptabs.forEach(function (t) { t.addEventListener('click', function () { auto = false; showPanel(+t.dataset.p); clearTimeout(resumeT); resumeT = setTimeout(function () { auto = true; }, 10000); }); });
