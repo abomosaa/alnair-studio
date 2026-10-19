@@ -403,6 +403,7 @@
   .more { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 14px 0; justify-content: center; align-items: center; }
   .q-footer__legal { justify-content: center !important; text-align: center; }
   @media (max-width: 600px) { .q-footer__legal { padding-bottom: 96px; } }
+  .req { color: var(--terracotta-600); font-weight: 700; }
   .sent { display: none; margin-top: 14px; color: var(--palm-700); font-weight: 600; animation: up .4s both; }
   @media (max-width: 600px) { .formcard { padding: 22px; } .v30 .q-btn { width: 100%; } .stage { height: 380px; } .frame { inset: 48px 22px 30px; } }
 
@@ -645,10 +646,10 @@
     <div class="formcard reveal">
       <h3 data-i18n="fH">Tell us about your project</h3>
       <form class="q-form" id="form">
-        <div class="q-field"><label for="f1" data-i18n="fName">Name</label><input id="f1" required autocomplete="name"></div>
+        <div class="q-field"><label for="f1"><span data-i18n="fName">Name</span> <span class="req" aria-hidden="true">*</span></label><input id="f1" required aria-required="true" autocomplete="name"></div>
         <div class="q-field"><label for="f2" data-i18n="fCo">Company</label><input id="f2" autocomplete="organization"></div>
-        <div class="q-field"><label for="f3" data-i18n="fEm">Email</label><input id="f3" type="email" required autocomplete="email" dir="ltr"></div>
-        <div class="q-field"><label for="f4" data-i18n="fPh">Phone</label><input id="f4" type="tel" placeholder="+966" dir="ltr" autocomplete="tel"></div>
+        <div class="q-field q-span"><label for="f3" data-i18n="fEm">Email</label><input id="f3" type="email" autocomplete="email" dir="ltr"></div>
+        
         <fieldset class="q-field q-span" style="border:0;padding:0;margin:0">
           <legend class="legend"><span data-i18n="fNeed">What do you need?</span> <small data-i18n="fNeedH">Choose all that apply</small></legend>
           <div class="opts">
@@ -857,7 +858,11 @@
     var needs = Array.prototype.map.call(f.querySelectorAll('input[name=need]:checked'), function (c) { return c.nextElementSibling.textContent; }).join('، ');
     var L = lang === 'ar' ? ['طلب مشروع جديد', 'الاسم', 'الجهة', 'البريد', 'الجوال', 'الاحتياج', 'التفاصيل'] : ['New project request', 'Name', 'Company', 'Email', 'Phone', 'Needs', 'Details'];
     var NL = String.fromCharCode(10);
-    var msg = [L[0]].concat([[1, 'f1'], [2, 'f2'], [3, 'f3'], [4, 'f4']].map(function (p) { return L[p[0]] + ': ' + v(p[1]); }), [L[5] + ': ' + needs, L[6] + ': ' + v('f6')]).join(NL);
+    var lines = [L[0]];
+    [[1, 'f1'], [2, 'f2'], [3, 'f3']].forEach(function (p) { if (v(p[1])) lines.push(L[p[0]] + ': ' + v(p[1])); });
+    if (needs) lines.push(L[5] + ': ' + needs);
+    if (v('f6')) lines.push(L[6] + ': ' + v('f6'));
+    var msg = lines.join(NL);
     window.open('https://wa.me/966502852854?text=' + encodeURIComponent(msg), '_blank', 'noopener');
     document.getElementById('sent').style.display = 'block';
   });
