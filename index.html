@@ -136,7 +136,11 @@
   [lang="ar"] .hp h2 { line-height: 1.35 !important; font-weight: 700; }
   [lang="ar"] .hp h3 { font-weight: 700; }
   [lang="ar"] .hp .q-eyebrow { font-size: 14px; }
-  [lang="ar"] .hp .q-wordmark b { font-size: 28px; font-weight: 700; }
+  [lang="ar"] .hp .q-wordmark b { font-size: 30px; font-weight: 700; line-height: 1; }
+  [lang="ar"] .hp .q-wordmark small { font-size: 12px; font-weight: 500; margin-top: 6px; text-transform: none; }
+  [lang="ar"] .nav .q-nav__links { gap: 30px; }
+  [lang="ar"] .nav .q-nav__links a { font-size: 15.5px; font-weight: 500; }
+  [lang="ar"] .nav .q-btn { font-weight: 600; }
 
   /* progress bar */
   .prog { position: fixed; top: 0; inset-inline-start: 0; height: 2px; width: 100%; transform-origin: left; transform: scaleX(var(--p, 0)); background: var(--gold-400); z-index: 40; }
@@ -144,7 +148,7 @@
 
   /* NAV */
   .nav { position: sticky; top: 0; z-index: 30; background: var(--night-900); backdrop-filter: blur(14px); border-bottom: 1px solid transparent; color: var(--night-ink); transition: background .3s, border-color .3s; }
-  .nav.scrolled { background: color-mix(in srgb, var(--night-900) 96%, transparent); border-color: var(--night-line); }
+  .nav.scrolled { background: var(--night-900); border-color: var(--night-line); box-shadow: 0 10px 30px rgba(0,0,0,.25); }
   .nav .q-nav__in { min-height: 72px; transition: min-height .3s; }
   .nav.scrolled .q-nav__in { min-height: 62px; }
   .nav .q-nav__links a { color: var(--night-muted); position: relative; }
@@ -383,7 +387,14 @@
   .sent { display: none; margin-top: 14px; color: var(--palm-700); font-weight: 600; animation: up .4s both; }
   @media (max-width: 600px) { .formcard { padding: 22px; } .v30 .q-btn { width: 100%; } .stage { height: 380px; } .frame { inset: 48px 22px 30px; } }
 
-  @media (prefers-reduced-motion: reduce) { .hp *, .hp *::before, .hp *::after { animation: none !important; transition: none !important; } .hp .reveal, .ln { opacity: 1 !important; transform: none !important; } .steps::after { transform: none !important; } }
+  @keyframes fadeOnly { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .marq__t, .float, .cursor, .caret, .nodes line, .nodes .pulse, .db div::before { animation: none !important; }
+    .intro > *, .mock-wrap, .screen > *, .faq details[open] p, .sent, .panel.on .ln { animation-name: fadeOnly !important; }
+    .hp .reveal { transform: none !important; transition: opacity .9s ease !important; }
+    .panel { transform: none !important; }
+    .bx:hover, .chips span:hover, .social a:hover, .proj:hover .proj__img img, .proj:hover .proj__img svg, .q-btn:hover .q-icon-dir, .phones div { transform: none !important; }
+  }
 </style>
 
 <div class="prog" id="prog" aria-hidden="true"></div>
@@ -671,7 +682,7 @@
 
   /* ---------- Arabic copy ---------- */
   var AR = {
-    brand: 'النيّر', brandSub: 'استوديو · تصميم · برمجة · ذكاء اصطناعي',
+    brand: 'النيّر', brandSub: 'استوديو تصميم وبرمجة',
     nServices: 'الخدمات', nAi: 'الذكاء الاصطناعي', nProcess: 'آلية العمل', nWork: 'أعمالنا', nFaq: 'الأسئلة الشائعة', ctaStart: 'ابدأ مشروعك', ctaWork: 'استكشف خدماتنا',
     pill: 'منتجات ثنائية اللغة تدعم العربية من اليوم الأول',
     h1: 'منتجات رقمية أنيقة، <em class="hl">نصممها</em> ونبنيها في السعودية.',
@@ -778,11 +789,11 @@
     ctx.globalAlpha = 1;
   }
   if (window.ResizeObserver) new ResizeObserver(size).observe(hero); else size();
-  if (!reduce) hero.addEventListener('pointermove', function (e) { var r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (!raf) raf = requestAnimationFrame(draw); });
+  hero.addEventListener('pointermove', function (e) { var r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (!raf) raf = requestAnimationFrame(draw); });
   hero.addEventListener('pointerleave', function () { mx = my = -999; if (!raf) raf = requestAnimationFrame(draw); });
 
   /* ---------- Design -> Code -> Live ---------- */
-  var panels = document.querySelectorAll('.panel'), ptabs = document.querySelectorAll('.mock__tabs button'), pIdx = 0, auto = !reduce;
+  var panels = document.querySelectorAll('.panel'), ptabs = document.querySelectorAll('.mock__tabs button'), pIdx = 0, auto = true;
   function showPanel(i) {
     pIdx = i;
     panels.forEach(function (p, j) { p.classList.toggle('on', j === i); p.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
@@ -799,7 +810,6 @@
     if (!e.isIntersecting) return; e.target.classList.add('in'); io.unobserve(e.target);
     e.target.querySelectorAll('[data-count]').forEach(function (n) {
       var to = +n.dataset.count, t0 = performance.now(); n._done = true;
-      if (reduce) { n.textContent = to + suffix(n); return; }
       (function tick(t) { var p = Math.min(1, (t - t0) / 1400); n.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + suffix(n); if (p < 1) requestAnimationFrame(tick); })(t0);
     });
   }); }, { threshold: 0.15 });
