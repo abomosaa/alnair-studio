@@ -217,7 +217,12 @@
   .slot.sel { border-color: var(--terracotta-600); background: color-mix(in srgb, var(--terracotta-400) 10%, transparent); }
   .slot.sel i { border: 5px solid var(--terracotta-600); }
   .slot small { display: block; color: var(--ink-muted); font-size: 12px; }
-  .app .q-btn { width: 100%; margin-top: 8px; min-height: 44px; }
+  .app .q-btn { width: 100%; margin-top: 8px; min-height: 44px; cursor: pointer; transition: background .3s, transform .2s; }
+  .app .q-btn:active { transform: scale(.98); }
+  .app .q-btn.done { background: var(--palm-700); }
+  .slot { cursor: pointer; transition: border-color .2s, background .2s; }
+  .slot:hover { border-color: var(--terracotta-400); }
+  .slot i { transition: border-width .2s, border-color .2s; }
   .float { position: absolute; background: var(--card); color: var(--ink); border-radius: var(--radius-md); padding: 12px 16px; box-shadow: var(--shadow-card); font-size: 12.5px; animation: bob 6s ease-in-out infinite; z-index: 2; }
   .float b { display: block; font-family: var(--font-display); font-size: 19px; color: var(--palm-700); line-height: 1.2; }
   .float--a { inset-block-start: -80px; inset-inline-end: 14px; }
@@ -421,7 +426,7 @@
     <div class="intro">
       <span class="pill" style="--d:0"><b>AR/EN</b><span data-i18n="pill">Bilingual products, right-to-left from day one</span></span>
       <h1 class="q-display" style="--d:1" data-i18n="h1">From idea to a digital product that <em class="hl">shines</em></h1>
-      <p class="sub" style="--d:2" data-i18n="sub">Alnair Studio designs and builds websites, web apps and mobile apps, from the first idea to a fast, secure launch, with smart AI touches such as an assistant that answers your customers around the clock.</p>
+      <p class="sub" style="--d:2" data-i18n="sub">We design and build websites and apps in Arabic and English, and we stay with you from the first idea to well beyond launch.</p>
       <div class="hero__cta" style="--d:3">
         <a class="q-btn q-btn--primary" href="#contact"><span data-i18n="ctaStart">Start a project</span> <svg class="q-icon q-icon-dir" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="q-btn q-btn--light" href="#services" data-i18n="ctaWork">Explore our services</a>
@@ -456,9 +461,9 @@
             <div class="app">
               <h5 data-i18n="appT">Book an appointment</h5>
               <p data-i18n="appS">Choose a time that suits you</p>
-              <div class="slot sel"><i></i><span><span data-i18n="appA">General check-up</span><small data-i18n="appAt">Today · 4:30 PM</small></span></div>
-              <div class="slot"><i></i><span><span data-i18n="appB">Dental cleaning</span><small data-i18n="appBt">Tomorrow · 10:00 AM</small></span></div>
-              <span class="q-btn q-btn--primary" data-i18n="appBtn">Confirm booking</span>
+              <div class="slot sel" role="radio" aria-checked="true" tabindex="0"><i></i><span><span data-i18n="appA">General check-up</span><small data-i18n="appAt">Today · 4:30 PM</small></span></div>
+              <div class="slot" role="radio" aria-checked="false" tabindex="0"><i></i><span><span data-i18n="appB">Dental cleaning</span><small data-i18n="appBt">Tomorrow · 10:00 AM</small></span></div>
+              <span class="q-btn q-btn--primary" role="button" tabindex="0" data-i18n="appBtn">Confirm booking</span>
             </div>
           </div>
         </div>
@@ -682,10 +687,10 @@
     nServices: 'الخدمات', nAi: 'الذكاء الاصطناعي', nProcess: 'آلية العمل', nWork: 'أعمالنا', nFaq: 'الأسئلة الشائعة', ctaStart: 'ابدأ مشروعك', ctaWork: 'استكشف خدماتنا',
     pill: 'منتجات ثنائية اللغة تدعم العربية من اليوم الأول',
     h1: 'من الفكرة إلى منتج رقمي <em class="hl">يلمع</em>',
-    sub: 'في استوديو النيّر نصمم ونبني المواقع وتطبيقات الويب والجوال، من أول فكرة حتى إطلاق سريع وآمن، مع لمسات من الذكاء الاصطناعي مثل مساعد يجيب عملاءك على مدار الساعة.',
+    sub: 'نصمم ونطوّر مواقع وتطبيقات بالعربية والإنجليزية، ونرافقك من الفكرة حتى ما بعد الإطلاق.',
     t1: 'من الدمام، السعودية', t2: 'متجاوب مع كل الشاشات', t3: 'عربي وإنجليزي',
     tabD: 'التصميم', tabC: 'الكود', tabL: 'جاهز',
-    appT: 'احجز موعدك', appS: 'اختر الوقت المناسب لك', appA: 'فحص عام', appAt: 'اليوم · 4:30 م', appB: 'تنظيف أسنان', appBt: 'غداً · 10:00 ص', appBtn: 'تأكيد الحجز',
+    appT: 'احجز موعدك', appS: 'اختر الوقت المناسب لك', appA: 'فحص عام', appAt: 'اليوم · 4:30 م', appB: 'تنظيف أسنان', appBt: 'غداً · 10:00 ص', appBtn: 'تأكيد الحجز', appDone: 'تم تأكيد الحجز ✓',
     f1: 'واجهات عربية أولاً', f2: 'تنفيذ مطابق للتصميم',
     sEy: 'خدماتنا', sH: 'كل ما يحتاجه منتجك <em class="hl">تحت سقف واحد</em>', sL: 'التصميم والتطوير معاً، فما توافق عليه هو ما يصل إلى مستخدميك بالضبط.',
     s1T: 'تصميم تجربة وواجهة المستخدم', s1P: 'بحث المستخدمين، والهياكل الأولية، ونماذج تفاعلية، وأنظمة تصميم متكاملة بالعربية والإنجليزية.', s1a: 'بحث المستخدمين', s1c: 'نماذج تفاعلية', s1d: 'أنظمة تصميم',
@@ -794,6 +799,16 @@
     pIdx = i;
     panels.forEach(function (p, j) { p.classList.toggle('on', j === i); p.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
     ptabs.forEach(function (t, j) { t.setAttribute('aria-selected', j === i ? 'true' : 'false'); });
+  }
+  function holdCycle() { auto = false; clearTimeout(resumeT); resumeT = setTimeout(function () { auto = true; }, 10000); }
+  var app = document.querySelector('.app');
+  if (app) {
+    var slots = app.querySelectorAll('.slot'), cbtn = app.querySelector('.q-btn');
+    var pick = function (sl) { slots.forEach(function (x) { x.classList.toggle('sel', x === sl); x.setAttribute('aria-checked', x === sl ? 'true' : 'false'); }); holdCycle(); };
+    slots.forEach(function (sl) { sl.addEventListener('click', function () { pick(sl); }); sl.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(sl); } }); });
+    var confirmB = function () { if (cbtn.classList.contains('done')) return; cbtn.classList.add('done'); cbtn.textContent = lang === 'ar' ? AR.appDone : 'Booking confirmed ✓'; holdCycle();
+      setTimeout(function () { cbtn.classList.remove('done'); cbtn.innerHTML = lang === 'ar' ? AR.appBtn : cbtn._en; }, 2500); };
+    cbtn.addEventListener('click', confirmB); cbtn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); confirmB(); } });
   }
   var resumeT; ptabs.forEach(function (t) { t.addEventListener('click', function () { auto = false; showPanel(+t.dataset.p); clearTimeout(resumeT); resumeT = setTimeout(function () { auto = true; }, 10000); }); });
   setInterval(function () { if (auto && !document.hidden) showPanel((pIdx + 1) % 3); }, 3800);
